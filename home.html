@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Swatch Demon - Sinais</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    :root {
+      --tema-azul: #0d6efd;
+      --tema-roxo: #6f42c1;
+      --tema-rosa: #d63384;
+    }
+    body {
+      font-family: sans-serif;
+      background-color: #000;
+      color: white;
+      padding: 20px;
+    }
+    .container {
+      border: 2px solid white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      background-color: var(--tema);
+    }
+    .sinais {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      white-space: pre-line;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #copy {
+      background: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <h2>🔮 Sinais de Aviator</h2>
+    <div id="hora"></div>
+    <div class="sinais" id="sinais"></div>
+    <button onclick="gerarSinais()">Gerar Novos Sinais</button>
+    <button id="copy" onclick="copiar()">Copiar</button>
+  </div>
+
+  <script>
+    const cores = ["var(--tema-azul)", "var(--tema-roxo)", "var(--tema-rosa)"];
+    const cor = cores[Math.floor(Math.random() * cores.length)];
+    document.documentElement.style.setProperty("--tema", cor);
+
+    function formatarHora(data) {
+      return data.toTimeString().split(' ')[0];
+    }
+
+    function gerarSinais() {
+      const agora = new Date();
+      const sinais = [];
+      for (let i = 0; i < 10; i++) {
+        const data = new Date(agora.getTime() + i * 30000);
+        const hora = formatarHora(data);
+        const r = Math.random();
+        let multi;
+        if (r < 0.6) multi = (Math.random() * (2 - 1.01) + 1.01).toFixed(2);
+        else if (r < 0.9) multi = (Math.random() * (5 - 2.01) + 2.01).toFixed(2);
+        else multi = (Math.random() * (50 - 5.01) + 5.01).toFixed(2);
+        sinais.push(`${hora} — x${multi}`);
+      }
+      document.getElementById("sinais").innerText = sinais.join("\n");
+      document.getElementById("hora").innerText = "⏰ " + formatarHora(agora);
+    }
+
+    function copiar() {
+      const txt = document.getElementById("sinais").innerText;
+      navigator.clipboard.writeText(txt);
+      alert("Sinais copiados!");
+    }
+
+    gerarSinais();
+  </script>
+</body>
+</html>
